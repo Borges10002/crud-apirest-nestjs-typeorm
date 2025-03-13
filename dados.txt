@@ -1,0 +1,10 @@
+extensoes 
+Sublime Text Keymap and Settings Importer
+
+
+DTO
+npm i class-validator class-transformer
+
+
+orm prisma
+toda alterar roda -> npx prisma generate
