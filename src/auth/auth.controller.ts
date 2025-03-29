@@ -17,14 +17,14 @@ import {
   FilesInterceptor,
 } from '@nestjs/platform-express';
 import { join } from 'path';
-import { User } from 'src/decorators/user.decorator';
-import { AuthGuard } from 'src/guads/auth.guard';
 import { AuthService } from './auth.service';
 import { AuthForgetDTO } from './dto/auth-forget.dto';
 import { AuthLoginDTO } from './dto/auth-login.dto';
 import { AuthRegisterDTO } from './dto/auth-register.dto';
 import { AuthResetDTO } from './dto/auth-reset.dto';
-import { FileService } from 'src/file/file.service';
+import { FileService } from '../file/file.service';
+import { AuthGuard } from '../guads/auth.guard';
+import { User } from '../decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
