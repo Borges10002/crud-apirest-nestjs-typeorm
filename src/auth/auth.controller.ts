@@ -6,6 +6,7 @@ import {
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Req,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -55,8 +56,8 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('me')
-  async me(@User() user) {
-    return { user };
+  async me(@User() user, @Req() { tokenPayload }) {
+    return { user, tokenPayload };
   }
 
   @UseInterceptors(FileInterceptor('file'))
