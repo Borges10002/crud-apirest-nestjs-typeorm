@@ -5,7 +5,9 @@ import { userRepositoryMock } from '../testing/user-repository.mock';
 import { userServiceMock } from '../testing/user-service.mock';
 import { AuthService } from './auth.service';
 import { userEntityList } from '../testing/use-entity-list-mock';
-import { acessToken } from '../testing/access-token.mock';
+import { jwtPayload } from '../testing/jwt.payload.mock';
+import { accessToken } from '../testing/access-token.mock';
+import { resetToken } from '../testing/reset-token.mock';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -31,10 +33,34 @@ describe('AuthService', () => {
   describe('Token', () => {
     test('createToken method', () => {
       const result = authService.createToken(userEntityList[0]);
+      expect(result).toEqual({ accessToken });
+    });
 
-      expect(result).toEqual({ acessToken });
+    test('checkToken method', () => {
+      const result = authService.checkToken(accessToken);
+      expect(result).toEqual(jwtPayload);
+    });
+
+    test('isValidToken method', () => {
+      const result = authService.isValidToken(accessToken);
+      expect(result).toEqual(true);
     });
   });
 
-  //describe('Autenticação', () => {});
+  describe('Autenticação', () => {
+    test('login method', async () => {
+      const result = await authService.login('borges10002@gmail.com', '123456');
+      expect(result).toEqual({ accessToken });
+    });
+
+    test('forget method', async () => {
+      const result = await authService.forget('borges10002@gmail.com');
+      expect(result).toEqual(true);
+    });
+
+    test('reset method', async () => {
+      const result = await authService.reset('641531', resetToken);
+      expect(result).toEqual({ accessToken });
+    });
+  });
 });
