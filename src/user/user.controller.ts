@@ -1,25 +1,24 @@
 import {
-  Body,
   Controller,
-  Delete,
-  Get,
-  Patch,
   Post,
+  Body,
+  Get,
   Put,
-  UseGuards,
+  Patch,
+  Delete,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
-
-import { CreateUserDTO } from './dto/create-user.dto';
-import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
-import { UpdateUserDTO } from './dto/update-put-user.dto';
-import { UserService } from './user.service';
+import { ParamId } from '../decorators/param-id.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
-import { AuthGuard } from '../guads/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
+import { RoleGuard } from '../guards/role.guard';
 import { LogInterceptor } from '../interceptors/log.interceptor';
-import { RoleGuard } from '../guads/role.guard';
-import { ParamId } from '../decorators/param-id.decorator';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
+import { UpdatePutUserDTO } from './dto/update-put-user.dto';
+import { UserService } from './user.service';
 
 @Roles(Role.Admin)
 @UseGuards(AuthGuard, RoleGuard)
@@ -29,23 +28,23 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() body: CreateUserDTO) {
-    return await this.userService.create(body);
+  async create(@Body() data: CreateUserDTO) {
+    return this.userService.create(data);
   }
 
-  @Roles(Role.Admin, Role.User)
   @Get()
   async list() {
-    return await this.userService.list();
+    return this.userService.list();
   }
 
   @Get(':id')
   async show(@ParamId() id: number) {
-    return await this.userService.show(id);
+    console.log({ id });
+    return this.userService.show(id);
   }
 
   @Put(':id')
-  async update(@Body() data: UpdateUserDTO, @ParamId() id: number) {
+  async update(@Body() data: UpdatePutUserDTO, @ParamId() id: number) {
     return this.userService.update(id, data);
   }
 
@@ -56,6 +55,8 @@ export class UserController {
 
   @Delete(':id')
   async delete(@ParamId() id: number) {
-    return this.userService.delete(id);
+    return {
+      success: await this.userService.delete(id),
+    };
   }
 }

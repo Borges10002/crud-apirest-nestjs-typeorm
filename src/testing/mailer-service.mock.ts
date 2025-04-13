@@ -1,4 +1,4 @@
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailerService } from '@nestjs-modules/mailer/dist';
 
 export const mailerServiceMock = {
   provide: MailerService,

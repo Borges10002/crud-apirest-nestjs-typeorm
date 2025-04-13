@@ -1,10 +1,10 @@
 import { Role } from '../enums/role.enum';
-import { UpdateUserDTO } from '../user/dto/update-put-user.dto';
+import { UpdatePutUserDTO } from '../user/dto/update-put-user.dto';
 
-export const updatePutUserDTO: UpdateUserDTO = {
+export const updatePutUserDTO: UpdatePutUserDTO = {
   birthAt: '2000-01-01',
-  email: 'borges10002@gmail.com',
-  nome: 'Joao Rangel',
+  email: 'joao@hcode.com.br',
+  name: 'Joao Rangel',
   password: '123456',
   role: Role.User,
 };

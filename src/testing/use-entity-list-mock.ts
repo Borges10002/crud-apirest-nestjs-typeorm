@@ -3,7 +3,7 @@ import { UserEntity } from '../user/entity/user.entity';
 
 export const userEntityList: UserEntity[] = [
   {
-    nome: 'borges',
+    name: 'borges',
     email: 'borges10002@gmail.com',
     password: '$2b$10$Qu0VEfL1imSlGKAmzpX5VOFMC7lFFXAk3XW2Ryb1UB7xjTPM4dupe',
     birthAt: new Date(),
@@ -13,7 +13,7 @@ export const userEntityList: UserEntity[] = [
     role: Role.Admin,
   },
   {
-    nome: 'teste',
+    name: 'teste',
     email: 'teste@gmail.com',
     password: '$2b$10$Qu0VEfL1imSlGKAmzpX5VOFMC7lFFXAk3XW2Ryb1UB7xjTPM4dupe',
     birthAt: new Date(),
@@ -23,7 +23,7 @@ export const userEntityList: UserEntity[] = [
     role: Role.Admin,
   },
   {
-    nome: 'teste2',
+    name: 'teste2',
     email: 'teste2@gmail.com',
     password: '$2b$10$Qu0VEfL1imSlGKAmzpX5VOFMC7lFFXAk3XW2Ryb1UB7xjTPM4dupe',
     birthAt: new Date(),

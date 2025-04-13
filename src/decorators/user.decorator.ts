@@ -16,7 +16,7 @@ export const User = createParamDecorator(
       }
     } else {
       throw new NotFoundException(
-        'Usuário não encontrado no Request. Use o AuthGuard para obter o usuário',
+        'Usuário não encontrado no Request. Use o AuthGuard para obter o usuário.',
       );
     }
   },

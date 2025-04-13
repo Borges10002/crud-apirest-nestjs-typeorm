@@ -1,11 +1,10 @@
 import {
-  forwardRef,
-  MiddlewareConsumer,
   Module,
   NestModule,
+  MiddlewareConsumer,
   RequestMethod,
+  forwardRef,
 } from '@nestjs/common';
-
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';

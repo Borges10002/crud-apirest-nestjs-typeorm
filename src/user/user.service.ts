@@ -1,56 +1,58 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
-import { UpdateUserDTO } from './dto/update-put-user.dto';
+import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import * as bcrypt from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private usersRepository: Repository<UserEntity>,
   ) {}
 
   async create(data: CreateUserDTO) {
     if (
-      await this.userRepository.exists({
+      await this.usersRepository.exist({
         where: {
           email: data.email,
         },
       })
     ) {
-      throw new NotFoundException(`Este e-mail ${data.email} já existe.`);
+      throw new BadRequestException('Este e-mail já está sendo usado.');
     }
-    const salt = await bcrypt.genSalt();
 
-    data.password = data.password;
+    const salt = await bcrypt.genSalt();
 
     data.password = await bcrypt.hash(data.password, salt);
 
-    const newUser = this.userRepository.create(data);
-    return await this.userRepository.save(newUser);
+    const user = this.usersRepository.create(data);
+
+    return this.usersRepository.save(user);
   }
 
   async list() {
-    return this.userRepository.find();
+    return this.usersRepository.find();
   }
 
   async show(id: number) {
     await this.exists(id);
 
-    return this.userRepository.findOneBy({ id });
+    return this.usersRepository.findOneBy({
+      id,
+    });
   }
 
   async update(
     id: number,
-    { birthAt, email, nome, password, role }: UpdateUserDTO,
+    { email, name, password, birthAt, role }: UpdatePutUserDTO,
   ) {
     await this.exists(id);
 
@@ -58,9 +60,9 @@ export class UserService {
 
     password = await bcrypt.hash(password, salt);
 
-    await this.userRepository.update(id, {
+    await this.usersRepository.update(id, {
       email,
-      nome,
+      name,
       password,
       birthAt: birthAt ? new Date(birthAt) : null,
       role,
@@ -71,7 +73,7 @@ export class UserService {
 
   async updatePartial(
     id: number,
-    { birthAt, email, nome, password, role }: UpdatePatchUserDTO,
+    { email, name, password, birthAt, role }: UpdatePatchUserDTO,
   ) {
     await this.exists(id);
 
@@ -85,13 +87,12 @@ export class UserService {
       data.email = email;
     }
 
-    if (nome) {
-      data.nome = nome;
+    if (name) {
+      data.name = name;
     }
 
     if (password) {
       const salt = await bcrypt.genSalt();
-
       data.password = await bcrypt.hash(password, salt);
     }
 
@@ -99,7 +100,7 @@ export class UserService {
       data.role = role;
     }
 
-    await this.userRepository.update(id, data);
+    await this.usersRepository.update(id, data);
 
     return this.show(id);
   }
@@ -107,16 +108,14 @@ export class UserService {
   async delete(id: number) {
     await this.exists(id);
 
-    await this.userRepository.delete({
-      id,
-    });
+    await this.usersRepository.delete(id);
 
     return true;
   }
 
   async exists(id: number) {
     if (
-      !(await this.userRepository.exists({
+      !(await this.usersRepository.exist({
         where: {
           id,
         },

@@ -1,7 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
-
-import { jwtPayload } from './jwt.payload.mock';
 import { accessToken } from './access-token.mock';
+import { jwtPayload } from './jwt-payload.mock';
 
 export const jwtServiceMock = {
   provide: JwtService,
